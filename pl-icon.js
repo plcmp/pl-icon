@@ -3,6 +3,7 @@ import { PlElement, html, css } from "polylib";
 class PlIcon extends PlElement {
     static get properties() {
         return {
+            title: { type: String, reflectToAttribute: true },
             iconset: { type: String },
             icon: { type: String, reflectToAttribute: true, observer: '_iconChanged' },
             size: { type: Number, value: () => '16' }
@@ -57,7 +58,7 @@ class PlIcon extends PlElement {
         this.$.plIcon.innerHTML = '';
 
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        let viewBox = icon.getAttribute("viewBox") || `0 0 ${this.size} ${this.size}`;
+        let viewBox = icon.getAttribute("viewBox") || `0 0 16 16`;
         let cssText = "pointer-events: none; display: block; width: 100%; height: 100%;";
         svg.setAttribute("viewBox", viewBox);
         svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
