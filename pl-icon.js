@@ -6,7 +6,7 @@ class PlIcon extends PlElement {
             title: { type: String, reflectToAttribute: true },
             iconset: { type: String },
             icon: { type: String, reflectToAttribute: true, observer: '_iconChanged' },
-            size: { type: Number, value: () => '16' }
+            size: { type: Number, value: '16' }
         }
     }
 
