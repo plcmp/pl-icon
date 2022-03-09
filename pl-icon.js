@@ -4,6 +4,7 @@ class PlIcon extends PlElement {
     static get properties() {
         return {
             title: { type: String, reflectToAttribute: true },
+            hidden: { type: String, reflectToAttribute: true },
             iconset: { type: String },
             icon: { type: String, reflectToAttribute: true, observer: '_iconChanged' },
             size: { type: Number, value: '16' }
@@ -14,11 +15,14 @@ class PlIcon extends PlElement {
         return css`
             :host {
                 display: flex;
-                transition: all .3s ease-in-out;
                 align-items: center;
                 justify-content: center;
                 width: fit-content;
                 height: fit-content;
+            }
+
+            :host([hidden]) {
+                display: none;
             }
 
             .pl-icon {
@@ -34,12 +38,6 @@ class PlIcon extends PlElement {
         return html`
             <span id="plIcon" class="pl-icon"></span>
         `;
-    }
-
-
-    connectedCallback() {
-        super.connectedCallback();
-        //this._iconChanged();
     }
 
     _iconChanged() {
