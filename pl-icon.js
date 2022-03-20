@@ -26,8 +26,8 @@ class PlIcon extends PlElement {
             }
 
             .pl-icon {
-                width: var(--pl-icon-width, 24px);;
-                height: var(--pl-icon-height, 24px);;
+                width: var(--pl-icon-width, var(--base-size-sm));
+                height: var(--pl-icon-height, var(--base-size-sm));
                 fill: var(--pl-icon-fill-color, currentcolor);
                 stroke: var(--pl-icon-stroke-color, none);
             }
