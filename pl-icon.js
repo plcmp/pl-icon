@@ -42,9 +42,12 @@ class PlIcon extends PlElement {
 
     _iconChanged() {
         const iconset = document.iconMap[this.iconset];
-        if (!iconset) return;
+        if (!iconset || !this.$.plIcon) return;
+
         const _tpl = document.createElement('template');
         iconset.forEach(icon => _tpl.appendChild(icon));
+        this.$.plIcon.innerHTML = '';
+
         if (!this.icon) {
             return;
         }
@@ -52,8 +55,6 @@ class PlIcon extends PlElement {
         if (!icon) {
             return;
         }
-
-        this.$.plIcon.innerHTML = '';
 
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         let viewBox = icon.getAttribute("viewBox") || `0 0 16 16`;
