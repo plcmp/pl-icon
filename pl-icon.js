@@ -1,73 +1,49 @@
-import { PlElement, html, css } from "polylib";
+import {css, html, PlElement} from "polylib";
 
 class PlIcon extends PlElement {
-    static get properties() {
-        return {
+    static properties = {
             title: { type: String, reflectToAttribute: true },
             hidden: { type: String, reflectToAttribute: true },
             iconset: { type: String },
             icon: { type: String, reflectToAttribute: true, observer: '_iconChanged' },
             size: { type: Number, value: '16' }
         }
-    }
 
-    static get css() {
-        return css`
+    static css = css`
             :host {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: fit-content;
-                height: fit-content;
+                display: inline-block;
             }
 
             :host([hidden]) {
                 display: none;
             }
-
-            .pl-icon {
-                width: var(--pl-icon-width, var(--base-size-sm));
-                height: var(--pl-icon-height, var(--base-size-sm));
+            #svg {
+                pointer-events: none; 
+                display: block;
                 fill: var(--pl-icon-fill-color, currentcolor);
                 stroke: var(--pl-icon-stroke-color, none);
             }
         `;
-    }
 
-    static get template() {
-        return html`
-            <span id="plIcon" class="pl-icon"></span>
-        `;
-    }
+    static template = html`<svg id="svg" viewBox="0 0 16 16" preserveAspectRatio="xMidYMid meet" width$="[[size]]" height$="[[size]]"></svg>`;
 
     _iconChanged() {
         const iconset = document.iconMap[this.iconset];
-        if (!iconset || !this.$.plIcon) return;
-
-        const _tpl = document.createElement('template');
-        iconset.forEach(icon => _tpl.appendChild(icon));
-        this.$.plIcon.innerHTML = '';
+        if (!iconset) return;
 
         if (!this.icon) {
+            this.$.svg.innerHTML = '';
             return;
-        }
-        let icon = _tpl.querySelector(`#${this.icon}`);
-        if (!icon) {
-            return;
-        }
+        } else {
+            let icon = [...iconset].find(i => i.id === this.icon);
+            if (!icon) return;
 
-        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        let viewBox = icon.getAttribute("viewBox") || `0 0 16 16`;
-        let cssText = "pointer-events: none; display: block; width: 100%; height: 100%;";
-        svg.setAttribute("viewBox", viewBox);
-        svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-        svg.setAttribute("focusable", "false");
-        svg.style.cssText = cssText;
-        let clonedIcon = icon.cloneNode(true);
-        svg.appendChild(clonedIcon);
-        this.$.plIcon.style.setProperty('--pl-icon-width', `${this.size}px`)
-        this.$.plIcon.style.setProperty('--pl-icon-height', `${this.size}px`)
-        this.$.plIcon.appendChild(svg);
+            let ivb = icon.getAttribute("viewBox");
+            if (ivb && ivb !== '0 0 16 16') {
+                this.$.svg.setAttribute("viewBox", ivb);
+            }
+            this.$.svg.replaceChildren(icon.cloneNode(true));
+        }
     }
 }
 
