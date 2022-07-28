@@ -41,7 +41,9 @@ class PlIcon extends PlElement {
             }
             this.$.svg?.replaceChildren(icon.cloneNode(true));
         } else {
-            this.$.svg?.innerHTML = '';
+            if(this.$.svg) {
+                this.$.svg.innerHTML = '';
+            }
         }
     }
 }
