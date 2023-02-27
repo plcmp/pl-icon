@@ -4,9 +4,10 @@ class PlIcon extends PlElement {
     static properties = {
             title: { type: String, reflectToAttribute: true },
             hidden: { type: String, reflectToAttribute: true },
-            iconset: { type: String, observer: '_iconChanged' },
+            iconset: { type: String, value: 'pl-default', observer: '_iconChanged' },
             icon: { type: String, reflectToAttribute: true, observer: '_iconChanged' },
-            size: { type: Number, value: '16' }
+            size: { type: Number, value: '16' },
+            animated: { type: Boolean, observer: '_animatedChanged' }
         }
 
     static css = css`
@@ -40,9 +41,22 @@ class PlIcon extends PlElement {
                 this.$.svg.setAttribute("viewBox", ivb);
             }
             this.$.svg?.replaceChildren(icon.cloneNode(true));
+            this._animatedChanged(this.animated);
         } else {
             if(this.$.svg) {
                 this.$.svg.innerHTML = '';
+            }
+        }
+
+    }
+
+    _animatedChanged(val){
+        if(this.$.svg) {
+            if(val) {
+                this.$.svg.unpauseAnimations()
+            } else {
+                this.$.svg.pauseAnimations()
+                this.$.svg.setCurrentTime(0)
             }
         }
     }
